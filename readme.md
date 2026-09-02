@@ -2,7 +2,7 @@
 
 # Authentication Mobile App
 
-(02-Sep-2026) An authentication mobile app with an API at www.github.com/kkamara/AuthenticationMobileAppBackend .
+(02-Sep-2026) A React Native auth mobile app with an API at www.github.com/kkamara/AuthenticationMobileAppBackend .
 
 * [Installation](#installation)
 
