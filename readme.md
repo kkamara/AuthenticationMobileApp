@@ -1,3 +1,5 @@
+<img src="https://github.com/kkamara/useful/blob/main/ReactNativeMobileAppBoilerplate.png?raw=true" alt="ReactNativeMobileAppBoilerplate.png" width=""/>
+
 # Authentication Mobile App
 
 (02-Sep-2026) An authentication mobile app with an API at www.github.com/kkamara/AuthenticationMobileAppBackend .
