@@ -31,8 +31,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -50,18 +50,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="(auth)"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="(user)"
-        options={{
-          title: 'User',
+          title: 'Sign In',
+          href: '/(tabs)/(auth)/authButtons',
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="sign-in" color={color} />,
         }}
       />
     </Tabs>
