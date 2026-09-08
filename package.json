@@ -1,5 +1,5 @@
 {
-  "name": "reactnativemobileappboilerplate",
+  "name": "authenticationmobileapp",
   "main": "expo-router/entry",
   "version": "1.0.0-alpha",
   "scripts": {
