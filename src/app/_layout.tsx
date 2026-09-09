@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
-import MessageProvider from '@/providers/MessageProvider';
+import AccountsProvider from '@/providers/AccountsProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,7 +51,7 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <MessageProvider>
+      <AccountsProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
@@ -62,7 +62,7 @@ function RootLayoutNav() {
             }}
           />
         </Stack>
-      </MessageProvider>
+      </AccountsProvider>
     </ThemeProvider>
   );
 }

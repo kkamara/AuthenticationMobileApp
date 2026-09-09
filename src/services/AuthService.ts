@@ -8,12 +8,11 @@ export const RegisterUserService = (
   
   return new Promise<RegisterResponse>(async (resolve, reject) => {
     await http.postData<RegisterResponse>(
-      '/accounts',
+      '/user/register',
       {
         firstName: credentials.firstName,
         lastName: credentials.lastName,
         email: credentials.email,
-        dob: credentials.dob,
         password: credentials.password,
         passwordConfirmation: credentials.passwordConfirmation,
       },
@@ -31,20 +30,20 @@ export const LoginUserService = (
   const http = new HttpService();
   
   return new Promise<LoginResponse>(async (resolve, reject) => {
-    await http.postData<LoginResponse>('/auth/login', credentials)
+    await http.postData<LoginResponse>('/user', credentials)
       .then(async response => {
         await storage.save({
           key: "user-token",
           data: {
-            authToken: response.data.data?.authToken,
+            token: response.data.data?.user?.token,
             user: {
               id: response.data.data?.user?.id,
               email: response.data.data?.user?.email,
               firstName: response.data.data?.user?.firstName,
               lastName: response.data.data?.user?.lastName,
-              isTest: response.data.data?.user?.isTest,
-              isAdmin: response.data.data?.user?.isAdmin,
-              dob: response.data.data?.user?.dob,
+              avatarPath: response.data.data?.user?.avatarPath,
+              createdAt: response.data.data?.user?.createdAt,
+              updatedAt: response.data.data?.user?.updatedAt,
             },
           }
         });
@@ -65,10 +64,10 @@ export const LogoutUserService= (
     } catch (err) {
       return resolve(false);
     }
-    if (!res.authToken) {
+    if (!res.token) {
       return resolve(false);
     }
-    await http.deleteData<LogoutResponse>('/auth/logout', "user-token")
+    await http.deleteData<LogoutResponse>('/user', "user-token")
       .then(async response => {
         try {
           await storage.remove({
@@ -88,5 +87,17 @@ export const LogoutUserService= (
           return reject(err);
         }
     });
+  });
+};
+
+export const AuthoriseUserService = (): Promise<AuthoriseResponse> => {
+  const http = new HttpService();
+  
+  return new Promise<AuthoriseResponse>(async (resolve, reject) => {
+    await http.getData<AuthoriseResponse>('/user/authorise', "user-token")
+      .then(async response => {
+        return resolve(response.data);
+      })
+      .catch((err: Error) => reject(err));
   });
 };

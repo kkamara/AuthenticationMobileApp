@@ -1,52 +1,13 @@
-type HelloWorldFunc = () => string;
-
-type ServerError = {
-  message?: string;
-};
-
-type CustomError = {
-  error?: string;
-};
-
 type RegisterUserServiceParams = {
   firstName: string;
   lastName: string;
-  dob: string;
   email: string;
   password: string;
   passwordConfirmation: string;
 };
 
 type LoginUserServiceParams = {
-  email: string;
   password: string;
-};
-
-type UserResponse = {
-  id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  createdAt: string;
-  updatedAt: string;
-  isTest: boolean;
-  isAdmin: boolean;
-  dob: string;
-};
-
-type RegisterResponse = {
-  user: UserResponse;
-};
-
-type LoginResponse = {
-  data: {
-    authToken: string;
-    user: UserResponse;
-  }
-};
-
-type LogoutResponse = {
-  message: string; 
 };
 
 type Path = string;
@@ -62,12 +23,93 @@ type RequestOptions = {
   Authorization?: string;
 };
 
-type HelloFromServerResponse = {
+type LoginCredentials = {
+  password: string;
+};
+
+type Login = (loginCreds: LoginCredentials) => Promise<LoginResponse|CustomError>;
+
+type UserResponse = {
+  id?: number;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  avatarPath?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+type LoginResponse = {
+  data?: {
+    user?: {
+      token?: string;
+    } & UserResponse;
+  };
+};
+
+type IsAuthenticated = Promise<boolean>;
+
+type ServerError = {
   message?: string;
+};
+
+type CustomError = {
+  error?: string;
+};
+
+type Logout = () => Promise<LogoutResponse|CustomError>;
+
+type LogoutResponse = {
+  message?: string; 
+};
+
+type RegisterCredentials = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+};
+
+type Register = (registerCreds: RegisterCredentials) => Promise<RegisterResponse|CustomError>;
+
+type RegisterResponse = {
+  user?: UserResponse;
+};
+
+type UpdateAccountResponse = {
+  user?: UserResponse;
+};
+
+type UpdateAccount = (updateCreds: UpdateAccountCredentials) => Promise<UpdateAccountResponse|CustomError>;
+
+type UpdateAccountCredentials = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+};
+
+type StorageResponse = {
+  token?: string;
+  user?: UserResponse;
 };
 
 type Loading = boolean;
 
-type GetHelloFromServer = () => Promise<void>;
+type ErrorType = string|null;
 
-type StorageResponse = {};
+type Authorise = () => Promise<AuthoriseResponse|CustomError>;
+
+type AuthoriseResponse = {
+  data?: {
+    id?: number;
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    avatarPath?: string;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+};
