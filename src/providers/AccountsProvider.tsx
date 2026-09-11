@@ -115,18 +115,15 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
       });
       if (res.token) {
         const logoutResponse = await LogoutUserService();
-        setLoading(false);
         if (false === logoutResponse) {
           return { error: "Failed to log out.", };
         }
         setIsAuth(false);
         return logoutResponse as LogoutResponse;
       } else {
-        setLoading(false);
         return { message: "Something unexpected happened. Please try again.", };
       }
     } catch (err) {
-      setLoading(false);
       if (err instanceof Error) {
         if (axios.isAxiosError<ServerError>(err)) {
           if ("ERR_NETWORK" === err.code) {
@@ -140,6 +137,8 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
       }
       setIsAuth(false);
       return { message: "Success" };
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -198,18 +197,14 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
       if (updateAccountResult instanceof Error) {
         if (axios.isAxiosError<ServerError>(updateAccountResult)) {
           if ("ERR_NETWORK" === updateAccountResult.code) {
-            setLoading(false);
             return { error: "Server unavailable.", };
           } else {
-            setLoading(false);
             return { error: updateAccountResult.response?.data?.message, };
           }
         } else {
-          setLoading(false);
           return { error: updateAccountResult.message };
         }
       } else {
-        setLoading(false);
         return updateAccountResult as UpdateAccountResponse;
       }
     } catch (err) {
@@ -217,6 +212,8 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
       if (err instanceof Error) {
         return { error: err.message };
       }
+    } finally {
+      setLoading(false);
     }
     return { error: "Something unexpected happened. Please try again.", };
   };

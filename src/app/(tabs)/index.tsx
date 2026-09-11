@@ -3,10 +3,9 @@ import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import Button from '@/components/Button';
 import { useAccounts } from '@/providers/AccountsProvider';
-import { isCustomErrorResponse } from '@/typeHandlers';
 
 export default function TabOneScreen() {
-  const { logout, isAuthenticated } = useAccounts();
+  const { logout } = useAccounts();
 
   return (
     <View style={styles.container}>
