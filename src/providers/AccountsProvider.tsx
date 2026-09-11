@@ -208,7 +208,6 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
         return updateAccountResult as UpdateAccountResponse;
       }
     } catch (err) {
-      setLoading(false);
       if (err instanceof Error) {
         return { error: err.message };
       }
