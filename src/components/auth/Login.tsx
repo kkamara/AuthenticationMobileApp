@@ -44,7 +44,7 @@ const Login = () => {
   return (
     <View style={styles.container}>
       <View style={styles.titleView}>
-``      <Text style={styles.title}>Login Screen</Text>
+        <Text style={styles.title}>Login Screen</Text>
       </View>
       <ErrorComponent error={error}/>
       <View style={styles.formGroup}>
