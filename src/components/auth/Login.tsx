@@ -57,7 +57,7 @@ const Login = () => {
           keyboardType='email-address'
         />
       </View>
-      <View style={styles.formGroup}>
+      <View style={[styles.formGroup, styles.passwordInputView]}>
         <Text style={styles.textLabel}>Password:</Text>
         <TextInput
           style={styles.input}
@@ -132,6 +132,9 @@ const styles = StyleSheet.create({
     maxHeight: 50,
     justifyContent: "flex-end",
     alignItems: 'flex-end',
+  },
+  passwordInputView: {
+    marginTop: 10,
   },
 });
 
