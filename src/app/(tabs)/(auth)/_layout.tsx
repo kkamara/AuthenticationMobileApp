@@ -9,5 +9,11 @@ export default function ExampleLayout() {
         headerShown: false,
       }}
     />
+     <Tabs.Screen
+      name="login"
+      options={{
+        headerShown: false,
+      }}
+    />
   </Tabs>;
 }
