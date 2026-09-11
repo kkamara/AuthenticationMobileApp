@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 74,
+    paddingTop: 74,
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 20,
