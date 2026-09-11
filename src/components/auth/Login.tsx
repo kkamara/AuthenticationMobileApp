@@ -1,17 +1,45 @@
 import { StyleSheet, TextInput } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text } from "@/components/Themed";
 import Button from '@/components/Button';
 import ErrorComponent from '@/components/Error';
+import {
+  CommonActions,
+  useNavigation,
+  useFocusEffect,
+} from 'expo-router/react-navigation';
+import Loading from "@/components/Loading";
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState<Boolean>(false);
+  
+  const navigation = useNavigation();
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
+      // Code here runs when the screen is FOCUSED
 
-  }, [])
+      return () => {
+        setEmail("");
+        setPassword("");
+        setError("");
+        setLoading(false);
+        setShowPassword(false);
+      };
+    }, [])
+  );
+
+  function toggleShowPassword() {
+    setShowPassword(prev => !prev);
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <View style={styles.container}>
@@ -20,23 +48,32 @@ const Login = () => {
       </View>
       <ErrorComponent error={error}/>
       <View style={styles.formGroup}>
-        <Text style={styles.textLabel}>Email: {email}</Text>
+        <Text style={styles.textLabel}>Email:</Text>
         <TextInput
           style={styles.input}
           value={email}
           onChangeText={setEmail}
           placeholder="Enter your email"
+          keyboardType='email-address'
         />
       </View>
       <View style={styles.formGroup}>
-        <Text style={styles.textLabel}>Password: {password}</Text>
+        <Text style={styles.textLabel}>Password:</Text>
         <TextInput
           style={styles.input}
           value={password}
           onChangeText={setPassword}
           placeholder="Enter your password"
-          secureTextEntry
+          secureTextEntry={showPassword === true}
         />
+        <View style={styles.showPasswordView}>
+          <Button
+            pressableStyle={styles.showPasswordBtn}
+            textStyle={styles.showPasswordText}
+            text={"Show Password"}
+            onPress={toggleShowPassword}
+          />
+        </View>
       </View>
       <Button
         pressableStyle={styles.button}
@@ -79,6 +116,23 @@ const styles = StyleSheet.create({
   titleView: {
     width: 300,
   },
+  showPasswordBtn: {
+    width: 120,
+    backgroundColor: "grey",
+    borderColor: "#000",
+    height: 40,
+  },
+  showPasswordText: {
+    fontSize: 10,
+    color: "#fff",
+    marginVertical: -2.2,
+  },
+  showPasswordView: {
+    flex: 1,
+    maxHeight: 50,
+    justifyContent: "flex-end",
+    alignItems: 'flex-end',
+  },
 });
 
-export default Login
+export default Login;
