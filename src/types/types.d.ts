@@ -7,6 +7,7 @@ type RegisterUserServiceParams = {
 };
 
 type LoginUserServiceParams = {
+  email: string;
   password: string;
 };
 
@@ -23,9 +24,7 @@ type RequestOptions = {
   Authorization?: string;
 };
 
-type LoginCredentials = {
-  password: string;
-};
+type LoginCredentials = LoginUserServiceParams;
 
 type Login = (loginCreds: LoginCredentials) => Promise<LoginResponse|CustomError>;
 
@@ -63,13 +62,7 @@ type LogoutResponse = {
   message?: string; 
 };
 
-type RegisterCredentials = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  passwordConfirmation: string;
-};
+type RegisterCredentials = RegisterUserServiceParams;
 
 type Register = (registerCreds: RegisterCredentials) => Promise<RegisterResponse|CustomError>;
 
@@ -113,3 +106,5 @@ type AuthoriseResponse = {
     updatedAt?: string;
   };
 };
+
+type Authenticated = boolean;

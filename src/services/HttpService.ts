@@ -37,9 +37,9 @@ export default class HttpService
         })
         .then(res => res)
         .catch((err: Error) => err);
-      if (tokenStorage && tokenStorage.authToken) {
+      if (tokenStorage && tokenStorage.token) {
         requestOptions = this.postRequestOptions({
-          token: tokenStorage.authToken,
+          token: tokenStorage.token,
           item,
         });
       }
@@ -66,9 +66,9 @@ export default class HttpService
         })
         .then(res => res)
         .catch((err: Error) => err);
-      if (tokenStorage && tokenStorage.authToken) {
+      if (tokenStorage && tokenStorage.token) {
         requestOptions = this.getRequestOptions(
-          tokenStorage.authToken,
+          tokenStorage.token,
         );
       }
     }
@@ -97,9 +97,9 @@ export default class HttpService
         })
         .then(res => res)
         .catch((err: Error) => err);
-      if (tokenStorage && tokenStorage.authToken) {
+      if (tokenStorage && tokenStorage.token) {
         requestOptions = this.patchRequestOptions({
-          token: tokenStorage.authToken,
+          token: tokenStorage.token,
           item,
         });
       }
@@ -126,9 +126,9 @@ export default class HttpService
         })
         .then(res => res)
         .catch((err: Error) => err);
-      if (tokenStorage && tokenStorage.authToken) {
+      if (tokenStorage && tokenStorage.token) {
         requestOptions = this.deleteRequestOptions(
-          tokenStorage.authToken,
+          tokenStorage.token,
         );
       }
     }

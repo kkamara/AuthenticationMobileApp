@@ -1,11 +1,12 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ColorValue, Pressable } from 'react-native';
 
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { useColorScheme } from '@/components/useColorScheme';
 import Colors from '@/constants/Colors';
+import { useAccounts } from '@/providers/AccountsProvider';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -18,6 +19,14 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const theme = 'dark' === colorScheme ? 'dark' : 'light';
+
+  const { isAuth } = useAccounts();
+
+  const [userIsAuthenticated, setUserIsAuthenticated] = useState<Authenticated>(false);
+
+  useEffect(() => {
+    setUserIsAuthenticated(isAuth);
+  }, [isAuth]);
 
   return (
     <Tabs
@@ -53,9 +62,18 @@ export default function TabLayout() {
         name="(auth)"
         options={{
           title: 'Sign In',
-          href: '/(tabs)/(auth)/authButtons',
+          href: false === userIsAuthenticated ? '/(tabs)/(auth)/authButtons' : null,
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="sign-in" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="(user)"
+        options={{
+          title: 'User',
+          href: true === userIsAuthenticated ? '/(tabs)/(user)/index' : null,
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </Tabs>

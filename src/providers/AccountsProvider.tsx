@@ -1,8 +1,8 @@
 import {
+  AuthoriseUserService,
   LoginUserService,
   LogoutUserService,
   RegisterUserService,
-  AuthoriseUserService,
 } from "@/services/AuthService";
 import HttpService from "@/services/HttpService";
 import storage from "@/storage";
@@ -22,6 +22,7 @@ type AccountType = {
   register: Register;
   updateAccount: UpdateAccount;
   authorise: Authorise;
+  isAuth: Authenticated;
 };
 
 const AccountContext = createContext<AccountType>({
@@ -32,10 +33,12 @@ const AccountContext = createContext<AccountType>({
   register: async ({}) => ({ error: "Not implemented.", }),
   updateAccount: async () => (({ error: "Not implemented", })),
   authorise: async () => (({ error: "Not implemented", })),
+  isAuth: false,
 });
 
 const AccountsProvider = ({ children, }: PropsWithChildren) => {
   const [loading, setLoading] = useState<Loading>(false);
+  const [isAuth, setIsAuth] = useState<Authenticated>(false);
 
   const login = async (loginCreds: LoginCredentials): Promise<LoginResponse|CustomError> => {
     setLoading(true);
@@ -57,6 +60,7 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
       }
     } else {
       setLoading(false);
+      setIsAuth(true);
       return response;
     }
   };
@@ -92,12 +96,14 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
       const res = await storage.load({
         key: "user-token",
       });
-      if (res.authToken) {
+      if (res.token) {
         tokenInMemory = true;
       }
       return tokenInMemory;
     } catch (err) {
       return tokenInMemory;
+    } finally {
+      setIsAuth(tokenInMemory);
     }
   };
 
@@ -107,12 +113,13 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
       const res = await storage.load({
         key: "user-token",
       });
-      if (res.authToken) {
+      if (res.token) {
         const logoutResponse = await LogoutUserService();
         setLoading(false);
         if (false === logoutResponse) {
           return { error: "Failed to log out.", };
         }
+        setIsAuth(false);
         return logoutResponse as LogoutResponse;
       } else {
         setLoading(false);
@@ -131,6 +138,7 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
           return { error: err.message, };
         }
       }
+      setIsAuth(false);
       return { message: "Success" };
     }
   };
@@ -247,6 +255,7 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
         register,
         updateAccount,
         authorise,
+        isAuth,
       }}
     >
       {children}

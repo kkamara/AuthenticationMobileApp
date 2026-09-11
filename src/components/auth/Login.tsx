@@ -1,28 +1,30 @@
-import { StyleSheet, TextInput } from 'react-native';
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text } from "@/components/Themed";
 import Button from '@/components/Button';
 import ErrorComponent from '@/components/Error';
+import Loading from "@/components/Loading";
+import { Text, View } from "@/components/Themed";
+import { useAccounts } from '@/providers/AccountsProvider';
+import { isCustomErrorResponse } from '@/typeHandlers';
 import {
   CommonActions,
-  useNavigation,
   useFocusEffect,
+  useNavigation,
 } from 'expo-router/react-navigation';
-import Loading from "@/components/Loading";
+import { useCallback, useState } from 'react';
+import { StyleSheet, TextInput } from 'react-native';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { login, loading: accountsLoading } = useAccounts();
+  const [email, setEmail] = useState('jane@example.com');
+  const [password, setPassword] = useState('secret');
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState<Boolean>(false);
   
   const navigation = useNavigation();
-
+  
   useFocusEffect(
     useCallback(() => {
       // Code here runs when the screen is FOCUSED
-
       return () => {
         setEmail("");
         setPassword("");
@@ -37,8 +39,27 @@ const Login = () => {
     setShowPassword(prev => !prev);
   }
 
-  if (loading) {
-    return <Loading />;
+  async function onSubmit() {
+    setLoading(true);
+    setError("");
+    const res = await login({ email, password });
+    if (true === isCustomErrorResponse(res)) {
+        setError(res.error || "Something went wrong");
+    } else {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'index' }],
+          })
+        );
+    }
+    setLoading(false);
+  }
+
+  if (loading || accountsLoading) {
+    return <View style={styles.container}>
+      <Loading />
+    </View>;
   }
 
   return (
@@ -46,7 +67,7 @@ const Login = () => {
       <View style={styles.titleView}>
         <Text style={styles.title}>Login Screen</Text>
       </View>
-      <ErrorComponent error={error}/>
+      <ErrorComponent style={styles.errorView} error={error}/>
       <View style={styles.formGroup}>
         <Text style={styles.textLabel}>Email:</Text>
         <TextInput
@@ -64,13 +85,13 @@ const Login = () => {
           value={password}
           onChangeText={setPassword}
           placeholder="Enter your password"
-          secureTextEntry={showPassword === true}
+          secureTextEntry={showPassword === false}
         />
         <View style={styles.showPasswordView}>
           <Button
             pressableStyle={styles.showPasswordBtn}
             textStyle={styles.showPasswordText}
-            text={"Show Password"}
+            text={showPassword ? "Hide Password" : "Show Password"}
             onPress={toggleShowPassword}
           />
         </View>
@@ -78,6 +99,7 @@ const Login = () => {
       <Button
         pressableStyle={styles.button}
         text="Submit"
+        onPress={onSubmit}
       />
     </View>
   )
@@ -107,7 +129,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   formGroup: {
-    marginTop: 40,
+    marginTop: 25,
   },
   button: {
     marginTop: 40,
@@ -135,6 +157,9 @@ const styles = StyleSheet.create({
   },
   passwordInputView: {
     marginTop: 10,
+  },
+  errorView: {
+    marginTop: 15,
   },
 });
 
