@@ -12,10 +12,13 @@ import {
 import { useCallback, useState } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 
+const defaultEmailState = "jane@example.com";
+const defaultPasswordState = "secret";
+
 const Login = () => {
-  const { login, loading: accountsLoading } = useAccounts();
-  const [email, setEmail] = useState('jane@example.com');
-  const [password, setPassword] = useState('secret');
+  const {login, loading: accountsLoading } = useAccounts();
+  const [email, setEmail] = useState(defaultEmailState);
+  const [password, setPassword] = useState(defaultPasswordState);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState<Boolean>(false);
@@ -26,8 +29,8 @@ const Login = () => {
     useCallback(() => {
       // Code here runs when the screen is FOCUSED
       return () => {
-        setEmail("");
-        setPassword("");
+        setEmail(defaultEmailState);
+        setPassword(defaultPasswordState);
         setError("");
         setLoading(false);
         setShowPassword(false);
