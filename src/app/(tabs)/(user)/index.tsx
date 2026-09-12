@@ -1,21 +1,26 @@
 import { StyleSheet, } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from '@/components/Themed';
 import { useAccounts } from '@/providers/AccountsProvider';
 import { CommonActions, useNavigation, } from 'expo-router/react-navigation';
 import { isCustomErrorResponse } from '@/typeHandlers';
 import Button from '@/components/Button';
+import Loading from "@/components/Loading";
 
 const AccountScreen = () => {
   const { logout } = useAccounts();
   
   const navigation = useNavigation();
 
+  const [loading, setLoading] = useState(false);
+
   async function onLogoutButtonPress() {
+    setLoading(true);
     const res = await logout();
     if (true === isCustomErrorResponse(res)) {
       // alert(res.error);
     }
+    setLoading(false);
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
@@ -30,6 +35,12 @@ const AccountScreen = () => {
         ],
       })
     );
+  }
+
+  if (loading) {
+    return <View style={styles.container}>
+      <Loading />
+    </View>
   }
 
   return (
