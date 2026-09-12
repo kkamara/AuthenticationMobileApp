@@ -1,16 +1,10 @@
 import React from 'react';
 import { Tabs, } from "expo-router";
 
-export default function AuthLayout() {
+export default function UserLayout() {
   return <Tabs backBehavior="history" screenOptions={{ tabBarStyle: { display: 'none', }, }}>
     <Tabs.Screen
-      name="authButtons"
-      options={{
-        headerShown: false,
-      }}
-    />
-     <Tabs.Screen
-      name="login"
+      name="index"
       options={{
         headerShown: false,
       }}

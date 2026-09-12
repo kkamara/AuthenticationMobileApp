@@ -35,10 +35,6 @@ const styles = StyleSheet.create({
     paddingTop: 74,
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   button: {
     marginBottom: 20,
     width: 400,

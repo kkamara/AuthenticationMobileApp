@@ -71,7 +71,7 @@ export default function TabLayout() {
         name="(user)"
         options={{
           title: 'User',
-          href: true === userIsAuthenticated ? '/(tabs)/(user)/index' : null,
+          href: true === userIsAuthenticated ? '/(tabs)/(user)' : null,
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
