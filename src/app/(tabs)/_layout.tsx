@@ -20,13 +20,17 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const theme = 'dark' === colorScheme ? 'dark' : 'light';
 
-  const { isAuth } = useAccounts();
+  const { isAuthenticated } = useAccounts();
 
   const [userIsAuthenticated, setUserIsAuthenticated] = useState<Authenticated>(false);
 
   useEffect(() => {
-    setUserIsAuthenticated(isAuth);
-  }, [isAuth]);
+    async function getAuthStatus() {
+      const authStatus = await isAuthenticated();
+      setUserIsAuthenticated(authStatus);
+    }
+    getAuthStatus();
+  }, [isAuthenticated]);
 
   return (
     <Tabs
