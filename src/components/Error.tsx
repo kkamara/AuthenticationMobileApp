@@ -14,7 +14,7 @@ const ErrorComponent = ({
 }) => {
   return (
     <View style={[styles.view, style ? style : null]}>
-      <Text style={styles.text} numberOfLines={2} ellipsizeMode="tail">
+      <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
         {error || ""}
       </Text>
     </View>

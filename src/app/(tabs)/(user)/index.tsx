@@ -6,11 +6,13 @@ import { CommonActions, useNavigation, } from 'expo-router/react-navigation';
 import { isCustomErrorResponse } from '@/typeHandlers';
 import Button from '@/components/Button';
 import Loading from "@/components/Loading";
+import { useRouter, } from 'expo-router';
 
 const AccountScreen = () => {
   const { logout } = useAccounts();
   
   const navigation = useNavigation();
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
@@ -37,6 +39,10 @@ const AccountScreen = () => {
     );
   }
 
+  function onSettingsButtonPress() {
+    router.navigate("/(tabs)/(user)/settings");
+  }
+
   if (loading) {
     return <View style={styles.container}>
       <Loading />
@@ -45,6 +51,12 @@ const AccountScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Button
+        pressableStyle={styles.button}
+        textStyle={styles.buttonText}
+        onPress={onSettingsButtonPress}
+        text="Settings"
+      />
       <Button
         pressableStyle={styles.button}
         textStyle={styles.buttonText}

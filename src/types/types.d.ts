@@ -96,15 +96,7 @@ type ErrorType = string|null;
 type Authorise = () => Promise<AuthoriseResponse|CustomError>;
 
 type AuthoriseResponse = {
-  data?: {
-    id?: number;
-    email?: string;
-    firstName?: string;
-    lastName?: string;
-    avatarPath?: string;
-    createdAt?: string;
-    updatedAt?: string;
-  };
+  data?: UserResponse;
 };
 
 type Authenticated = boolean;

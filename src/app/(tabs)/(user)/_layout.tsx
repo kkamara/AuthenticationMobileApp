@@ -9,5 +9,11 @@ export default function UserLayout() {
         headerShown: false,
       }}
     />
+    <Tabs.Screen
+      name="settings"
+      options={{
+        headerShown: false,
+      }}
+    />
   </Tabs>;
 }
