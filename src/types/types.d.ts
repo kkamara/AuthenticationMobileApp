@@ -100,3 +100,16 @@ type AuthoriseResponse = {
 };
 
 type Authenticated = boolean;
+
+type AvatarFile = {
+  uri: string;
+  type: string;
+  fileName: string;
+};
+
+type UploadAvatar = (avatar: AvatarFile) => Promise<UploadAvatarResponse|CustomError>;
+
+type UploadAvatarResponse = {
+  data?: UserResponse;
+};
+

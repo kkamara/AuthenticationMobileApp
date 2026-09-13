@@ -49,6 +49,10 @@ const Settings = () => {
     setLoading(false);
   }
 
+  async function onUploadAvatar() {
+    await getUserData();
+  }
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -63,7 +67,12 @@ const Settings = () => {
         <Text style={styles.title}>Settings</Text>
       </View>
       <ErrorComponent style={styles.errorView} error={error} />
-      <UpdateAvatar user={user} />
+      <UpdateAvatar
+        user={user}
+        setError={setError}
+        setLoading={setLoading}
+        onUploadAvatar={onUploadAvatar}
+      />
     </View>
   );
 };

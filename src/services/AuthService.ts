@@ -101,3 +101,26 @@ export const AuthoriseUserService = (): Promise<AuthoriseResponse> => {
       .catch((err: Error) => reject(err));
   });
 };
+
+export const UploadAvatarService = (
+  avatar: AvatarFile,
+): Promise<UploadAvatarResponse> => {
+  const http = new HttpService();
+  const formData = new FormData();
+  // Laravel's PUT route cannot parse multipart bodies, so spoof the method via POST
+  formData.append("_method", "PUT");
+  formData.append("avatar", {
+    uri: avatar.uri,
+    type: avatar.type,
+    name: avatar.fileName,
+  } as any);
+
+  return new Promise<UploadAvatarResponse>(async (resolve, reject) => {
+    await http.postFormData<UploadAvatarResponse>('/user/avatar', formData, "user-token")
+      .then(async response => {
+        return resolve(response.data);
+      })
+      .catch((err: Error) => reject(err));
+  });
+};
+

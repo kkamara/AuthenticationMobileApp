@@ -1,18 +1,28 @@
-import { Text, View } from "@/components/Themed";
-import { useState, useEffect, } from 'react';
+import Button from "@/components/Button";
+import { View } from "@/components/Themed";
+import { useAccounts } from "@/providers/AccountsProvider";
+import { isCustomErrorResponse } from "@/typeHandlers";
+import { useEffect, useState, } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import Button from "@/components/Button";
-import { useAccounts } from "@/providers/AccountsProvider";
 
 interface Props {
   style?: object;
   user: UserResponse | null;
+  setError: (error: string) => void;
+  setLoading: (loading: boolean) => void;
+  onUploadAvatar: () => Promise<void>;
 }
 
-const UpdateAvatar = ({ style, user }: Props) => {
+const UpdateAvatar = ({
+  style,
+  user,
+  setError,
+  setLoading,
+  onUploadAvatar,
+}: Props) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
-  const {} = useAccounts();
+  const { uploadAvatar } = useAccounts();
 
   useEffect(() => {
     setImageUri(user?.avatarPath || null);
@@ -23,9 +33,9 @@ const UpdateAvatar = ({ style, user }: Props) => {
     return;
   }
 
-  async function handleSelect() {
-    console.log("in handle select");
-    return;
+  async function handleUpload() {
+    setLoading(true);
+    setError("");
     try {
       const result = await launchImageLibrary({
         mediaType: 'photo',
@@ -33,11 +43,28 @@ const UpdateAvatar = ({ style, user }: Props) => {
         selectionLimit: 1,
       });
 
-      if (!result.didCancel && result.assets?.[0]?.uri) {
-        setImageUri(result.assets[0].uri);
+      const asset = result.assets?.[0];
+      if (!result.didCancel && asset?.uri) {
+        const response = await uploadAvatar({
+          uri: asset.uri,
+          type: asset.type || 'image/jpeg',
+          fileName: asset.fileName || 'avatar.jpg',
+        });
+
+        if (true === isCustomErrorResponse(response)) {
+          console.error('Upload error:', response.error);
+          setError(response.error || "Something went wrong.");
+          setLoading(false);
+          return;
+        }
+
+        await onUploadAvatar();
       }
+      setLoading(false);
     } catch (error) {
       console.error('Upload error:', error);
+      setError((error as Error).message);
+      setLoading(false);
     }
   };
   
@@ -51,7 +78,7 @@ const UpdateAvatar = ({ style, user }: Props) => {
         <Button
           pressableStyle={styles.uploadAvatarButton}
           textStyle={styles.uploadAvatarButtonText}
-          onPress={handleSelect}
+          onPress={handleUpload}
           text="Upload"
         />
         <Button
@@ -93,7 +120,7 @@ const styles = StyleSheet.create({
   },
   uploadAvatarButton: {
     width: 130,
-    marginBottom: 5,
+    marginBottom: 7,
     borderWidth: 0,
   },
   uploadAvatarButtonText: {

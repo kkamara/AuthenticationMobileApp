@@ -3,6 +3,7 @@ import {
   LoginUserService,
   LogoutUserService,
   RegisterUserService,
+  UploadAvatarService,
 } from "@/services/AuthService";
 import HttpService from "@/services/HttpService";
 import storage from "@/storage";
@@ -23,6 +24,7 @@ type AccountType = {
   updateAccount: UpdateAccount;
   authorise: Authorise;
   isAuth: Authenticated;
+  uploadAvatar: UploadAvatar;
 };
 
 const AccountContext = createContext<AccountType>({
@@ -34,6 +36,7 @@ const AccountContext = createContext<AccountType>({
   updateAccount: async () => (({ error: "Not implemented", })),
   authorise: async () => (({ error: "Not implemented", })),
   isAuth: false,
+  uploadAvatar: async () => (({ error: "Not implemented", })),
 });
 
 const AccountsProvider = ({ children, }: PropsWithChildren) => {
@@ -241,6 +244,60 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
     }
   };
 
+  const uploadAvatar = async (avatar: AvatarFile): Promise<UploadAvatarResponse|CustomError> => {
+    setLoading(true);
+    try {
+      const storageRes = await storage.load<StorageResponse>({
+        key: "user-token",
+      });
+      const uploadAvatarResult = await UploadAvatarService(avatar)
+        .then(async response => {
+          try {
+            await storage.save({
+              key: "user-token",
+              data: {
+                token: storageRes.token,
+                user: {
+                  id: response.data?.id,
+                  email: response.data?.email,
+                  firstName: response.data?.firstName,
+                  lastName: response.data?.lastName,
+                  avatarPath: response.data?.avatarPath,
+                  createdAt: response.data?.createdAt,
+                  updatedAt: response.data?.updatedAt,
+                },
+              },
+            });
+          } catch (err) {
+            return err;
+          }
+          return response;
+        })
+        .catch((err: Error) => err);
+
+      if (uploadAvatarResult instanceof Error) {
+        if (axios.isAxiosError<ServerError>(uploadAvatarResult)) {
+          if ("ERR_NETWORK" === uploadAvatarResult.code) {
+            return { error: "Server unavailable.", };
+          } else {
+            return { error: uploadAvatarResult.response?.data?.message, };
+          }
+        } else {
+          return { error: uploadAvatarResult.message };
+        }
+      } else {
+        return uploadAvatarResult as UploadAvatarResponse;
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        return { error: err.message };
+      }
+    } finally {
+      setLoading(false);
+    }
+    return { error: "Something unexpected happened. Please try again.", };
+  };
+
   return (
     <AccountContext.Provider 
       value={{
@@ -252,6 +309,7 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
         updateAccount,
         authorise,
         isAuth,
+        uploadAvatar,
       }}
     >
       {children}
