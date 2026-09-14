@@ -3,10 +3,12 @@ import { Link, Tabs } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ColorValue, Pressable } from 'react-native';
 
+import Loading from "@/components/Loading";
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { useColorScheme } from '@/components/useColorScheme';
 import Colors from '@/constants/Colors';
 import { useAccounts } from '@/providers/AccountsProvider';
+import storage from "@/storage";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -20,17 +22,31 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const theme = 'dark' === colorScheme ? 'dark' : 'light';
 
-  const { isAuthenticated } = useAccounts();
+  const { logout, isAuth } = useAccounts();
 
   const [userIsAuthenticated, setUserIsAuthenticated] = useState<Authenticated>(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getAuthStatus() {
-      const authStatus = await isAuthenticated();
-      setUserIsAuthenticated(authStatus);
+      setLoading(true);
+      setUserIsAuthenticated(isAuth);
+      try {
+        const storageRes = await storage
+          .load({ key: "user-token" });
+        if (false === isAuth && storageRes.token) {
+          await logout();
+        }
+      } finally {
+        setLoading(false);
+      }
     }
     getAuthStatus();
-  }, [isAuthenticated]);
+  }, [logout, isAuth]);
+
+  if (loading) {
+    return <Loading/>;
+  }
 
   return (
     <Tabs
