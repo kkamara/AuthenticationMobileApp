@@ -53,6 +53,10 @@ const Settings = () => {
     await getUserData();
   }
 
+  async function onRemoveAvatar() {
+    await getUserData();
+  }
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -72,6 +76,7 @@ const Settings = () => {
         setError={setError}
         setLoading={setLoading}
         onUploadAvatar={onUploadAvatar}
+        onRemoveAvatar={onRemoveAvatar}
       />
     </View>
   );

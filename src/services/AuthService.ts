@@ -124,3 +124,17 @@ export const UploadAvatarService = (
   });
 };
 
+export const RemoveAvatarService = (): Promise<RemoveAvatarResponse> => {
+  const http = new HttpService();
+
+  return new Promise<RemoveAvatarResponse>(async (resolve, reject) => {
+    await http.deleteData<RemoveAvatarResponse>(
+      '/user/avatar',
+      "user-token",
+    )
+      .then(async response => {
+        return resolve(response.data);
+      })
+      .catch((err: Error) => reject(err));
+  });
+};

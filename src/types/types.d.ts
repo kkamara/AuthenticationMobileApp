@@ -111,3 +111,8 @@ type UploadAvatarResponse = {
   data?: UserResponse;
 };
 
+type RemoveAvatar = () => Promise<RemoveAvatarResponse|CustomError>;
+
+type RemoveAvatarResponse = {
+  data?: UserResponse;
+};

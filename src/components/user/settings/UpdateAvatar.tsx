@@ -12,6 +12,7 @@ interface Props {
   setError: (error: string) => void;
   setLoading: (loading: boolean) => void;
   onUploadAvatar: () => Promise<void>;
+  onRemoveAvatar: () => Promise<void>;
 }
 
 const UpdateAvatar = ({
@@ -20,17 +21,30 @@ const UpdateAvatar = ({
   setError,
   setLoading,
   onUploadAvatar,
+  onRemoveAvatar,
 }: Props) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
-  const { uploadAvatar } = useAccounts();
+  const { uploadAvatar, removeAvatar } = useAccounts();
 
   useEffect(() => {
     setImageUri(user?.avatarPath || null);
   }, [user]);
 
   async function handleRemove() {
-    console.log("in handle remove");
-    return;
+    setLoading(true);
+    setError("");
+    try {
+      const response = await removeAvatar();
+      if (true === isCustomErrorResponse(response)) {
+        setError(response.error || "Something went wrong.");
+        return;
+      }
+      await onRemoveAvatar();
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleUpload() {
@@ -52,7 +66,6 @@ const UpdateAvatar = ({
         });
 
         if (true === isCustomErrorResponse(response)) {
-          console.error('Upload error:', response.error);
           setError(response.error || "Something went wrong.");
           setLoading(false);
           return;
@@ -60,10 +73,9 @@ const UpdateAvatar = ({
 
         await onUploadAvatar();
       }
-      setLoading(false);
     } catch (error) {
-      console.error('Upload error:', error);
       setError((error as Error).message);
+    } finally {
       setLoading(false);
     }
   };
