@@ -8,7 +8,7 @@ import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { useColorScheme } from '@/components/useColorScheme';
 import Colors from '@/constants/Colors';
 import { useAccounts } from '@/providers/AccountsProvider';
-import storage from "@/storage";
+import { isCustomErrorResponse } from "@/typeHandlers";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -22,7 +22,11 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const theme = 'dark' === colorScheme ? 'dark' : 'light';
 
-  const { logout, isAuth } = useAccounts();
+  const {
+    logout,
+    isAuth,
+    authorise,
+  } = useAccounts();
 
   const [userIsAuthenticated, setUserIsAuthenticated] = useState<Authenticated>(false);
   const [loading, setLoading] = useState(false);
@@ -32,9 +36,8 @@ export default function TabLayout() {
       setLoading(true);
       setUserIsAuthenticated(isAuth);
       try {
-        const storageRes = await storage
-          .load({ key: "user-token" });
-        if (false === isAuth && storageRes.token) {
+        const authoriseRes = await authorise();
+        if (true === isCustomErrorResponse(authoriseRes)) {
           await logout();
         }
       } finally {
@@ -42,7 +45,7 @@ export default function TabLayout() {
       }
     }
     getAuthStatus();
-  }, [logout, isAuth]);
+  }, [isAuth]);
 
   if (loading) {
     return <Loading/>;
