@@ -1,31 +1,79 @@
-import { StyleSheet, TextInput } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { View, Text } from "@/components/Themed";
+import Button from "@/components/Button";
 import ErrorComponent from '@/components/Error';
 import Loading from "@/components/Loading";
+import { Text, View } from "@/components/Themed";
 import { useAccounts } from "@/providers/AccountsProvider";
-import Button from "@/components/Button";
+import { isCustomErrorResponse } from '@/typeHandlers';
+import {
+  CommonActions,
+  useFocusEffect,
+  useNavigation,
+} from 'expo-router/react-navigation';
+import { useCallback, useState } from 'react';
+import { StyleSheet, TextInput } from 'react-native';
+
+const defaultFirstNameState = "John";
+const defaultLastNameState = "Doe";
+const defaultEmailState = "john@example.com";
+const defaultPasswordState = "secret";
+const defaultPasswordConfirmationState = defaultPasswordState;
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const { register, loading: accountsLoading } = useAccounts();
   const [error, setError] = useState("");
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [firstName, setFirstName] = useState(defaultFirstNameState);
+  const [lastName, setLastName] = useState(defaultLastNameState);
+  const [email, setEmail] = useState(defaultEmailState);
+  const [password, setPassword] = useState(defaultPasswordState);
+  const [passwordConfirmation, setPasswordConfirmation] = useState(defaultPasswordConfirmationState);
   const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-  }, []);
+  
+  const navigation = useNavigation();
+  
+  useFocusEffect(
+    useCallback(() => {
+      // Code here runs when the screen is FOCUSED
+      return () => {
+        setFirstName(defaultFirstNameState);
+        setLastName(defaultLastNameState);
+        setEmail(defaultEmailState);
+        setPassword(defaultPasswordState);
+        setPasswordConfirmation(defaultPasswordConfirmationState);
+        setError("");
+        setLoading(false);
+        setShowPassword(false);
+      };
+    }, [])
+  );
 
   function toggleShowPassword() {
     setShowPassword(prev => !prev);
   }
 
   async function onSubmit() {
+    setLoading(true);
+    setError("");
+    const res = await register({
+      email,
+      password,
+      firstName,
+      lastName,
+      passwordConfirmation,
+    });
+    if (true === isCustomErrorResponse(res)) {
+        setError(res.error || "Something went wrong.");
+    } else {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'index' }],
+        })
+      );
+      alert("You have registered successfully.");
+    }
+    setLoading(false);
   }
 
   if (loading || accountsLoading) {
@@ -79,7 +127,7 @@ const Register = () => {
         />
       </View>
       <View style={styles.formGroup}>
-        <Text style={styles.textLabel}>Confirm Password:</Text>
+        <Text style={styles.textLabel}>Confirm Password:*</Text>
         <TextInput
           style={styles.input}
           value={passwordConfirmation}
