@@ -29,7 +29,7 @@ type AccountType = {
 const AccountContext = createContext<AccountType>({
   loading: false,
   login: async ({}) => ({ error: "Not implemented.", }),
-  logout: async () => ({ error: "", }),
+  logout: async () => ({ error: "Not implemented.", }),
   register: async ({}) => ({ error: "Not implemented.", }),
   updateAccount: async () => (({ error: "Not implemented", })),
   authorise: async () => (({ error: "Not implemented", })),
