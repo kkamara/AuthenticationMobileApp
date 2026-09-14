@@ -93,7 +93,7 @@ const Login = () => {
         <View style={styles.showPasswordView}>
           <Button
             pressableStyle={styles.showPasswordBtn}
-            textStyle={styles.showPasswordText}
+            textStyle={styles.showPasswordBtnText}
             text={showPassword ? "Hide Password" : "Show Password"}
             onPress={toggleShowPassword}
           />
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     height: 40,
   },
-  showPasswordText: {
+  showPasswordBtnText: {
     fontSize: 10,
     color: "#fff",
     marginVertical: -2.2,
