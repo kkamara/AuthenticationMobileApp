@@ -10,6 +10,10 @@ export default function AuthButtonsScreen() {
     router.push('/login');
   }
 
+  function goToRegisterScreen() {
+    router.push('/register');
+  }
+
   return (
     <View style={styles.container}>
       <Button
@@ -19,6 +23,7 @@ export default function AuthButtonsScreen() {
         text="Login"
       />
       <Button
+        onPress={goToRegisterScreen}
         pressableStyle={styles.button}
         textStyle={styles.buttonText}
         text="Register"

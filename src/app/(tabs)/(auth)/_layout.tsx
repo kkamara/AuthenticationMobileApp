@@ -9,8 +9,14 @@ export default function AuthLayout() {
         headerShown: false,
       }}
     />
-     <Tabs.Screen
+    <Tabs.Screen
       name="login"
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Tabs.Screen
+      name="register"
       options={{
         headerShown: false,
       }}
