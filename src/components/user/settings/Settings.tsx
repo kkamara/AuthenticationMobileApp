@@ -135,67 +135,69 @@ const Settings = () => {
           onUploadAvatar={onUploadAvatar}
           onRemoveAvatar={onRemoveAvatar}
         />
-        <View style={styles.formGroup}>
-          <Text style={styles.textLabel}>First Name:*</Text>
-          <TextInput
-            style={styles.input}
-            value={firstName}
-            onChangeText={setFirstName}
-            placeholder="Enter your first name"
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.textLabel}>Last Name:*</Text>
-          <TextInput
-            style={styles.input}
-            value={lastName}
-            onChangeText={setLastName}
-            placeholder="Enter your last name"
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.textLabel}>Email:*</Text>
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            placeholder="Enter your email"
-            keyboardType='email-address'
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.textLabel}>Password:*</Text>
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Enter your password"
-            secureTextEntry={showPassword === false}
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.textLabel}>Confirm Password:*</Text>
-          <TextInput
-            style={styles.input}
-            value={passwordConfirmation}
-            onChangeText={setPasswordConfirmation}
-            placeholder="Enter your password confirmation"
-            secureTextEntry={showPassword === false}
-          />
-          <View style={styles.showPasswordView}>
-            <Button
-              pressableStyle={styles.showPasswordBtn}
-              textStyle={styles.showPasswordBtnText}
-              text={showPassword ? "Hide Password" : "Show Password"}
-              onPress={toggleShowPassword}
+        <View style={styles.form}>
+          <View style={styles.formGroup}>
+            <Text style={styles.textLabel}>First Name:*</Text>
+            <TextInput
+              style={styles.input}
+              value={firstName}
+              onChangeText={setFirstName}
+              placeholder="Enter your first name"
             />
           </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.textLabel}>Last Name:*</Text>
+            <TextInput
+              style={styles.input}
+              value={lastName}
+              onChangeText={setLastName}
+              placeholder="Enter your last name"
+            />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.textLabel}>Email:*</Text>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter your email"
+              keyboardType='email-address'
+            />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.textLabel}>Password:*</Text>
+            <TextInput
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Enter your password"
+              secureTextEntry={showPassword === false}
+            />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.textLabel}>Confirm Password:*</Text>
+            <TextInput
+              style={styles.input}
+              value={passwordConfirmation}
+              onChangeText={setPasswordConfirmation}
+              placeholder="Enter your password confirmation"
+              secureTextEntry={showPassword === false}
+            />
+            <View style={styles.showPasswordView}>
+              <Button
+                pressableStyle={styles.showPasswordBtn}
+                textStyle={styles.showPasswordBtnText}
+                text={showPassword ? "Hide Password" : "Show Password"}
+                onPress={toggleShowPassword}
+              />
+            </View>
+          </View>
+          <Button
+            pressableStyle={styles.button}
+            text="Submit"
+            onPress={onSubmit}
+          />
         </View>
-        <Button
-          pressableStyle={styles.button}
-          text="Submit"
-          onPress={onSubmit}
-        />
       </View>
     </ScrollView>
   );
@@ -254,6 +256,9 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 40,
     width: 310,
+  },
+  form: {
+    marginTop: 80,
   },
 });
 
