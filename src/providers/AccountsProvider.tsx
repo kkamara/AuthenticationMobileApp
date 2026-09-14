@@ -112,33 +112,25 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
 
   const logout = async (): Promise<LogoutResponse|CustomError> => {
     setLoading(true);
+    setIsAuth(false);
     try {
-      const res = await storage.load({
-        key: "user-token",
-      });
-      if (res.token) {
-        const logoutResponse = await LogoutUserService();
-        if (false === logoutResponse) {
-          return { error: "Failed to log out.", };
-        }
-        setIsAuth(false);
-        return logoutResponse as LogoutResponse;
-      } else {
-        return { message: "Something unexpected happened. Please try again.", };
+      const logoutResponse = await LogoutUserService();
+      if (false === logoutResponse) {
+        return { message: "Success" };
       }
+      return logoutResponse as LogoutResponse;
     } catch (err) {
       if (err instanceof Error) {
         if (axios.isAxiosError<ServerError>(err)) {
           if ("ERR_NETWORK" === err.code) {
             return { error: "Server unavailable.", };
           } else {
-            return { error: err.response?.data?.message, };
+            return { message: "Success" };
           }
         } else {
-          return { error: err.message, };
+          return { message: "Success" };
         }
       }
-      setIsAuth(false);
       return { message: "Success" };
     } finally {
       setLoading(false);

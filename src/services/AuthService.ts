@@ -62,10 +62,10 @@ export const LogoutUserService= (
     try {
       res = await storage.load({ key: "user-token" });
     } catch (err) {
-      return resolve(false);
+      return resolve({ message: "User data was already removed." });
     }
     if (!res.token) {
-      return resolve(false);
+      return resolve({ message: "Token was already removed." });
     }
     await http.deleteData<LogoutResponse>('/user', "user-token")
       .then(async response => {
