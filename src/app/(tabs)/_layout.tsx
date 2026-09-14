@@ -1,7 +1,11 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ColorValue, Pressable } from 'react-native';
+import {
+  ColorValue,
+  Pressable,
+  StyleSheet,
+} from 'react-native';
 
 import Loading from "@/components/Loading";
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
@@ -9,6 +13,7 @@ import { useColorScheme } from '@/components/useColorScheme';
 import Colors from '@/constants/Colors';
 import { useAccounts } from '@/providers/AccountsProvider';
 import { isCustomErrorResponse } from "@/typeHandlers";
+import { View } from "@/components/Themed";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -47,8 +52,18 @@ export default function TabLayout() {
     getAuthStatus();
   }, [isAuth]);
 
+  // Here so StyleSheet can access the theme correctly
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: Colors[theme].background,
+    },
+  });
+
   if (loading) {
-    return <Loading/>;
+    return <View style={styles.container}>
+      <Loading/>
+    </View>;
   }
 
   return (
