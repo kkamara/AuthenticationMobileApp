@@ -121,7 +121,6 @@ const Settings = () => {
 
   return (
     <ScrollView
-      contentContainerStyle={{}}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.container}>
@@ -136,7 +135,6 @@ const Settings = () => {
           onUploadAvatar={onUploadAvatar}
           onRemoveAvatar={onRemoveAvatar}
         />
-        <ErrorComponent style={styles.errorView} error={error}/>
         <View style={styles.formGroup}>
           <Text style={styles.textLabel}>First Name:*</Text>
           <TextInput
