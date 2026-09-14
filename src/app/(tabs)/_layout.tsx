@@ -35,7 +35,6 @@ export default function TabLayout() {
     loading: accountsLoading,
   } = useAccounts();
 
-  const [userIsAuthenticated, setUserIsAuthenticated] = useState<Authenticated>(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -45,9 +44,8 @@ export default function TabLayout() {
         const authoriseRes = await authorise();
         if (true === isCustomErrorResponse(authoriseRes)) {
           await logout();
-          setUserIsAuthenticated(false);
+          setIsAuth(false);
         } else {
-          setUserIsAuthenticated(true);
           setIsAuth(true);
         }
       } finally {
@@ -97,7 +95,7 @@ export default function TabLayout() {
         name="(auth)"
         options={{
           title: 'Sign In',
-          href: false === userIsAuthenticated ? '/(tabs)/(auth)/authButtons' : null,
+          href: false === isAuth ? '/(tabs)/(auth)/authButtons' : null,
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="sign-in" color={color} />,
         }}
@@ -106,7 +104,7 @@ export default function TabLayout() {
         name="(user)"
         options={{
           title: 'User',
-          href: true === userIsAuthenticated ? '/(tabs)/(user)' : null,
+          href: true === isAuth ? '/(tabs)/(user)' : null,
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
