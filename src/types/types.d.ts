@@ -46,8 +46,6 @@ type LoginResponse = {
   };
 };
 
-type IsAuthenticated = Promise<boolean>;
-
 type ServerError = {
   message?: string;
 };

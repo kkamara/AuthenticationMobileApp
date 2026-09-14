@@ -18,7 +18,6 @@ import {
 type AccountType = {
   loading: Loading;
   login: Login;
-  isAuthenticated: () => IsAuthenticated;
   logout: Logout;
   register: Register;
   updateAccount: UpdateAccount;
@@ -30,7 +29,6 @@ type AccountType = {
 const AccountContext = createContext<AccountType>({
   loading: false,
   login: async ({}) => ({ error: "Not implemented.", }),
-  isAuthenticated: async () => (false),
   logout: async () => ({ error: "", }),
   register: async ({}) => ({ error: "Not implemented.", }),
   updateAccount: async () => (({ error: "Not implemented", })),
@@ -90,23 +88,6 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
     } else {
       setLoading(false);
       return response;
-    }
-  };
-
-  const isAuthenticated = async (): IsAuthenticated => {
-    let tokenInMemory = false;
-    try {
-      const res = await storage.load({
-        key: "user-token",
-      });
-      if (res.token) {
-        tokenInMemory = true;
-      }
-      return tokenInMemory;
-    } catch (err) {
-      return tokenInMemory;
-    } finally {
-      setIsAuth(tokenInMemory);
     }
   };
 
@@ -295,7 +276,6 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
       value={{
         loading,
         login,
-        isAuthenticated,
         logout,
         register,
         updateAccount,
