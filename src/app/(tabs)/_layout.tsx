@@ -32,7 +32,6 @@ export default function TabLayout() {
     isAuth,
     setIsAuth,
     authorise,
-    loading: accountsLoading,
   } = useAccounts();
 
   const [loading, setLoading] = useState(false);
@@ -55,7 +54,7 @@ export default function TabLayout() {
     getAuthStatus();
   }, [isAuth]);
 
-  if (loading || accountsLoading) {
+  if (loading) {
     return <View style={styles.container}>
       <Loading/>
     </View>;
