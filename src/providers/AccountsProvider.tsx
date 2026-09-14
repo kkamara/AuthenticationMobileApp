@@ -24,6 +24,7 @@ type AccountType = {
   updateAccount: UpdateAccount;
   authorise: Authorise;
   isAuth: Authenticated;
+  setIsAuth: (auth: Authenticated) => void;
   uploadAvatar: UploadAvatar;
   removeAvatar: RemoveAvatar;
 };
@@ -36,6 +37,7 @@ const AccountContext = createContext<AccountType>({
   updateAccount: async () => (({ error: "Not implemented", })),
   authorise: async () => (({ error: "Not implemented", })),
   isAuth: false,
+  setIsAuth: (auth: Authenticated) => {},
   uploadAvatar: async () => (({ error: "Not implemented", })),
   removeAvatar: async () => (({ error: "Not implemented", })),
 });
@@ -96,7 +98,6 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
 
   const logout = async (): Promise<LogoutResponse|CustomError> => {
     setLoading(true);
-    setIsAuth(false);
     try {
       const logoutResponse = await LogoutUserService();
       if (false === logoutResponse) {
@@ -117,6 +118,7 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
       }
       return { message: "Success" };
     } finally {
+      setIsAuth(false);
       setLoading(false);
     }
   };
@@ -338,6 +340,7 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
         updateAccount,
         authorise,
         isAuth,
+        setIsAuth,
         uploadAvatar,
         removeAvatar,
       }}

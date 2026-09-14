@@ -30,7 +30,9 @@ export default function TabLayout() {
   const {
     logout,
     isAuth,
+    setIsAuth,
     authorise,
+    loading: accountsLoading,
   } = useAccounts();
 
   const [userIsAuthenticated, setUserIsAuthenticated] = useState<Authenticated>(false);
@@ -39,11 +41,14 @@ export default function TabLayout() {
   useEffect(() => {
     async function getAuthStatus() {
       setLoading(true);
-      setUserIsAuthenticated(isAuth);
       try {
         const authoriseRes = await authorise();
         if (true === isCustomErrorResponse(authoriseRes)) {
           await logout();
+          setUserIsAuthenticated(false);
+        } else {
+          setUserIsAuthenticated(true);
+          setIsAuth(true);
         }
       } finally {
         setLoading(false);
@@ -52,7 +57,7 @@ export default function TabLayout() {
     getAuthStatus();
   }, [isAuth]);
 
-  if (loading) {
+  if (loading || accountsLoading) {
     return <View style={styles.container}>
       <Loading/>
     </View>;
