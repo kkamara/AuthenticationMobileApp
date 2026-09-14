@@ -63,7 +63,7 @@ const Register = () => {
       passwordConfirmation,
     });
     if (true === isCustomErrorResponse(res)) {
-        setError(res.error || "Something went wrong.");
+      setError(res.error || "Something went wrong.");
     } else {
       navigation.dispatch(
         CommonActions.reset({

@@ -4,11 +4,7 @@ import Loading from '@/components/Loading';
 import { Text, View } from '@/components/Themed';
 import { useAccounts } from '@/providers/AccountsProvider';
 import { isCustomErrorResponse } from '@/typeHandlers';
-import {
-  CommonActions,
-  useFocusEffect,
-  useNavigation,
-} from 'expo-router/react-navigation';
+import { useFocusEffect, useNavigation } from 'expo-router/react-navigation';
 import {
   useCallback,
   useEffect,
@@ -20,12 +16,11 @@ import {
   ScrollView,
 } from 'react-native';
 import UpdateAvatar from './UpdateAvatar';
+import storage from '@/storage';
 
-const defaultFirstNameState = "John";
-const defaultLastNameState = "Doe";
-const defaultEmailState = "john@example.com";
-const defaultPasswordState = "secret";
-const defaultPasswordConfirmationState = defaultPasswordState;
+const defaultFirstNameState = "";
+const defaultLastNameState = "";
+const defaultEmailState = "";
 
 const Settings = () => {
   const [error, setError] = useState("");
@@ -42,8 +37,8 @@ const Settings = () => {
   const [firstName, setFirstName] = useState(defaultFirstNameState);
   const [lastName, setLastName] = useState(defaultLastNameState);
   const [email, setEmail] = useState(defaultEmailState);
-  const [password, setPassword] = useState(defaultPasswordState);
-  const [passwordConfirmation, setPasswordConfirmation] = useState(defaultPasswordConfirmationState);
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
@@ -53,6 +48,11 @@ const Settings = () => {
         setUser(null);
         setLoading(false);
         setError("");
+        setFirstName(defaultFirstNameState);
+        setLastName(defaultLastNameState);
+        setEmail(defaultEmailState);
+        setPassword("");
+        setPasswordConfirmation("");
       }
     );
   }, [])
@@ -70,7 +70,13 @@ const Settings = () => {
       setError(res.error || "Something went wrong.");
     } else {
       console.log("Settings user data from server", res.data);
-      setUser(res.data as UserResponse);
+      const userRes = res.data as UserResponse;
+      setUser(userRes);
+      setFirstName(userRes.firstName || defaultFirstNameState);
+      setLastName(userRes.lastName || defaultLastNameState);
+      setEmail(userRes.email || defaultEmailState);
+      setPassword("");
+      setPasswordConfirmation("");
     }
     setLoading(false);
   }
@@ -98,16 +104,40 @@ const Settings = () => {
       passwordConfirmation,
     });
     if (true === isCustomErrorResponse(res)) {
-        setError(res.error || "Something went wrong.");
+      setError(res.error || "Something went wrong.");
     } else {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'index' }],
-        })
-      );
+      const updateAccountRes = res.data as UserResponse;
+      setFirstName(updateAccountRes.firstName || defaultFirstNameState);
+      setLastName(updateAccountRes.lastName || defaultLastNameState);
+      setEmail(updateAccountRes.email || defaultEmailState);
+
+      try {
+        const storageRes = await storage.load({
+          key: "user-token",
+        });
+        await storage.save({
+          key: "user-token",
+          data: {
+            token: storageRes.token,
+            user: {
+              id: updateAccountRes.id,
+              email: updateAccountRes.email,
+              firstName: updateAccountRes.firstName,
+              lastName: updateAccountRes.lastName,
+              avatarPath: updateAccountRes.avatarPath,
+              createdAt: updateAccountRes.createdAt,
+              updatedAt: updateAccountRes.updatedAt,
+            },
+          },
+        });
+      } catch (err) {
+        setError((err as Error).message);
+      }
+
       alert("You have updated your account successfully.");
     }
+    setPassword("");
+    setPasswordConfirmation("");
     setLoading(false);
   }
 

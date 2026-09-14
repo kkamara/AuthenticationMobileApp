@@ -158,13 +158,13 @@ const AccountsProvider = ({ children, }: PropsWithChildren) => {
               data: {
                 token: storageRes.token,
                 user: {
-                  id: response.data.user?.id,
-                  email: response.data.user?.email,
-                  firstName: response.data.user?.firstName,
-                  lastName: response.data.user?.lastName,
-                  avatarPath: response.data.user?.avatarPath,
-                  createdAt: response.data.user?.createdAt,
-                  updatedAt: response.data.user?.updatedAt,
+                  id: response.data.data?.id,
+                  email: response.data.data?.email,
+                  firstName: response.data.data?.firstName,
+                  lastName: response.data.data?.lastName,
+                  avatarPath: response.data.data?.avatarPath,
+                  createdAt: response.data.data?.createdAt,
+                  updatedAt: response.data.data?.updatedAt,
                 },
               },
             })

@@ -47,14 +47,14 @@ const Login = () => {
     setError("");
     const res = await login({ email, password });
     if (true === isCustomErrorResponse(res)) {
-        setError(res.error || "Something went wrong.");
+      setError(res.error || "Something went wrong.");
     } else {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'index' }],
-          })
-        );
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'index' }],
+        })
+      );
     }
     setLoading(false);
   }

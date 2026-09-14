@@ -69,7 +69,7 @@ type RegisterResponse = {
 };
 
 type UpdateAccountResponse = {
-  user?: UserResponse;
+  data?: UserResponse;
 };
 
 type UpdateAccount = (updateCreds: UpdateAccountCredentials) => Promise<UpdateAccountResponse|CustomError>;
