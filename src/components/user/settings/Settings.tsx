@@ -195,7 +195,7 @@ const Settings = () => {
             />
           </View>
           <View style={styles.formGroup}>
-            <Text style={styles.textLabel}>Password:*</Text>
+            <Text style={styles.textLabel}>Password:</Text>
             <TextInput
               style={styles.input}
               value={password}
@@ -205,7 +205,7 @@ const Settings = () => {
             />
           </View>
           <View style={styles.formGroup}>
-            <Text style={styles.textLabel}>Confirm Password:*</Text>
+            <Text style={styles.textLabel}>Confirm Password:</Text>
             <TextInput
               style={styles.input}
               value={passwordConfirmation}
