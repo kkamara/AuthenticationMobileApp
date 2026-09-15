@@ -33,7 +33,7 @@ yarn android
 
 ## Extra Details
 
-This app was created with `npx create-expo-app ReactNativeMobileAppBoilerplate --template` command and choosing the `Navigation (TypeScript)` template. This can also be done with `npx create-expo-app ReactNativeMobileAppBoilerplate -t`.
+This app was created with `npx create-expo-app AuthenticationMobileApp --template` command and choosing the `Navigation (TypeScript)` template. This can also be done with `npx create-expo-app AuthenticationMobileApp -t`.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
