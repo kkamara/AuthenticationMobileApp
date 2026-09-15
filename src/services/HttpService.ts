@@ -8,7 +8,7 @@ export default class HttpService
 {
   _domain = webAPI;
   _url = `${this._domain}`;
-  _timeout = 5000;
+  _timeout = 10000;
 
   get domain() {
     return this._domain;
