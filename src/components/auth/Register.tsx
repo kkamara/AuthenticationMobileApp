@@ -10,7 +10,12 @@ import {
   useNavigation,
 } from 'expo-router/react-navigation';
 import { useCallback, useState } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 
 const defaultFirstNameState = "John";
 const defaultLastNameState = "Doe";
@@ -83,77 +88,86 @@ const Register = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.titleView}>
-        <Text style={styles.title}>Register Screen</Text>
-      </View>
-      <ErrorComponent style={styles.errorView} error={error}/>
-      <View style={styles.formGroup}>
-        <Text style={styles.textLabel}>First Name:*</Text>
-        <TextInput
-          style={styles.input}
-          value={firstName}
-          onChangeText={setFirstName}
-          placeholder="Enter your first name"
-        />
-      </View>
-      <View style={styles.formGroup}>
-        <Text style={styles.textLabel}>Last Name:*</Text>
-        <TextInput
-          style={styles.input}
-          value={lastName}
-          onChangeText={setLastName}
-          placeholder="Enter your last name"
-        />
-      </View>
-      <View style={styles.formGroup}>
-        <Text style={styles.textLabel}>Email:*</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Enter your email"
-          keyboardType='email-address'
-        />
-      </View>
-      <View style={styles.formGroup}>
-        <Text style={styles.textLabel}>Password:*</Text>
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Enter your password"
-          secureTextEntry={showPassword === false}
-        />
-      </View>
-      <View style={styles.formGroup}>
-        <Text style={styles.textLabel}>Confirm Password:*</Text>
-        <TextInput
-          style={styles.input}
-          value={passwordConfirmation}
-          onChangeText={setPasswordConfirmation}
-          placeholder="Enter your password confirmation"
-          secureTextEntry={showPassword === false}
-        />
-        <View style={styles.showPasswordView}>
-          <Button
-            pressableStyle={styles.showPasswordBtn}
-            textStyle={styles.showPasswordBtnText}
-            text={showPassword ? "Hide Password" : "Show Password"}
-            onPress={toggleShowPassword}
+    <KeyboardAvoidingView
+      behavior={'ios' === Platform.OS ? 'padding' : 'height'}
+      style={styles.keyboardAvoidingView}
+    >
+      <View style={styles.container}>
+        <View style={styles.titleView}>
+          <Text style={styles.title}>Register Screen</Text>
+        </View>
+        <ErrorComponent style={styles.errorView} error={error}/>
+        <View style={styles.formGroup}>
+          <Text style={styles.textLabel}>First Name:*</Text>
+          <TextInput
+            style={styles.input}
+            value={firstName}
+            onChangeText={setFirstName}
+            placeholder="Enter your first name"
           />
         </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.textLabel}>Last Name:*</Text>
+          <TextInput
+            style={styles.input}
+            value={lastName}
+            onChangeText={setLastName}
+            placeholder="Enter your last name"
+          />
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.textLabel}>Email:*</Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Enter your email"
+            keyboardType='email-address'
+          />
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.textLabel}>Password:*</Text>
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Enter your password"
+            secureTextEntry={showPassword === false}
+          />
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.textLabel}>Confirm Password:*</Text>
+          <TextInput
+            style={styles.input}
+            value={passwordConfirmation}
+            onChangeText={setPasswordConfirmation}
+            placeholder="Enter your password confirmation"
+            secureTextEntry={showPassword === false}
+          />
+          <View style={styles.showPasswordView}>
+            <Button
+              pressableStyle={styles.showPasswordBtn}
+              textStyle={styles.showPasswordBtnText}
+              text={showPassword ? "Hide Password" : "Show Password"}
+              onPress={toggleShowPassword}
+            />
+          </View>
+        </View>
+        <Button
+          pressableStyle={styles.button}
+          text="Submit"
+          onPress={onSubmit}
+        />
       </View>
-      <Button
-        pressableStyle={styles.button}
-        text="Submit"
-        onPress={onSubmit}
-      />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+    width: "100%",
+  },
   container: {
     flex: 1,
     alignItems: 'center',
